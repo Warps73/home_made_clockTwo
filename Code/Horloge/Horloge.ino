@@ -1,7 +1,7 @@
 #include <Adafruit_NeoPixel.h> // Charge la librairie Neo Pixel d'Adafruit utilisé pour piloter le ruban de LED
 
 #define PIXEL_PIN 6 // On définit le pin où est connecté la patte DATA du bandeau
-#define PIXEL_COUNT 198 // On définit le nombre de LED compris sur le Ruban de LED soit 150 pour le ruban de 5m50 150 le new ruban
+#define PIXEL_COUNT 114 // On définit le nombre de LED compris sur le Ruban de LED soit 150 pour le ruban de 5m50 150 le new ruban
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + NEO_KHZ800); // Paramètre l'objet strip qui correspond à toute les LED du ruban
 
@@ -23,12 +23,12 @@ int WHITE[3] = {255, 255, 255}; // Couleur Blanche
 int OFF[3] = {0, 0, 0}; // Éteint
 
 void loop() {
-//  allLeds(OFF, OFF);
-  strip.setBrightness(100); // Règle la luminosité à 100 % de la luminosité maximale
-  chenillardUp(10, GREEN);
+//  allLeds(WHITE, WHITE);
+  strip.setBrightness(85); // Règle la luminosité à 100 % de la luminosité maximale
+//  chenillardUp(10, WHITE);
   //  randLed();
-  //  int leds[2] = { 17, 18}; // initialize array a
-  //  specifcLed(leds, WHITE);
+    int leds[2] = { 113, 112}; // initialize array a
+    specifcLed(leds, WHITE);
 
 }
 
@@ -81,12 +81,12 @@ void chenillardUp(int temps, int color[3])
 }
 
 
-void specifcLed(int leds[], int COLOR[3])
+void specifcLed(int leds[2], int COLOR[3])
 {
   //  for (int i = 0 ; i > 2 ; i++)
   //  {
-  strip.setPixelColor(18, COLOR[0], COLOR[1], COLOR[2]);
-  strip.setPixelColor(17, COLOR[0], COLOR[1], COLOR[2]);
+  strip.setPixelColor(leds[0], COLOR[0], COLOR[1], COLOR[2]);
+  strip.setPixelColor(leds[1], COLOR[0], COLOR[1], COLOR[2]);
 
   strip.show();
   //  }
