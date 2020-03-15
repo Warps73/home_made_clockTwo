@@ -68,7 +68,7 @@ int arrHeures[] = {51, 52, 53, 54, 55, 56};
 int HEURES_COUNT = 6;
 int arrMoins[] = {45, 44, 43, 42, 41};
 int MOINS_COUNT = 5;
-int arrLe[] = {39, 40};
+int arrLe[] = {38, 39};
 int LE_COUNT = 2;
 int arrDixMinute[] = {37, 36, 35};
 int DIX_MIN_COUNT = 3;
@@ -106,7 +106,7 @@ void setup() {
   strip.begin(); // Lance la connection
   Serial.begin(9600);
   strip.show();
-  warmUp(20, MAINCOLOR);
+  warmUp(10, MAINCOLOR);
 
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -122,48 +122,55 @@ void setup() {
 
     // Following line sets the RTC with an explicit date & time
     // for example to set January 27 2017 at 12:56 you would call:
-        rtc.adjust(DateTime(2020, 16, 02, 17, 27, 20));
+    rtc.adjust(DateTime(2020, 16, 02, 17, 27, 20));
   }
-//    rtc.adjust(DateTime(2019, 22, 12, 12, 12, 15));
-//rtc.adjust(DateTime(2020, 16, 02, 17, 30, 35));
+  //    rtc.adjust(DateTime(2019, 22, 12, 12, 12, 15));
+  //rtc.adjust(DateTime(2020, 16, 02, 17, 30, 35));
 }
 
 void loop() {
   DateTime now = rtc.now();
   int hours = now.hour();
   int minutes = now.minute();
-    Serial.print(now.hour(), DEC);
-    Serial.print(now.minute(), DEC);
+
+  //  Serial.print(now.hour(), DEC);
+  //  Serial.print(now.minute(), DEC);
 
 
   // IF Midnight SET hours to 24
   // to not get negative hours
-  if (hours == 0) {
-    hours += 24;
+  if (hours > 20 || hours < 7 ) {
+    strip.setBrightness(100);
+  }else{
+    strip.setBrightness(255);
+  }
+   Serial.print(strip.getBrightness());
+
+  // Set hours if more than half an hour
+  // ex :"Trois heures moins cinq"
+  if (minutes > 34) {
+    hours++;
   }
 
   // SET hours to 0-12
-  if (hours >= 12) {
+  if (hours > 12) {
     hours = hours - 12;
   }
-  // Set hours if more than half an hour
-  // ex :"Trois heures moins cinq"
-  if (minutes >= 35) {
-    hours++;
-  }
+
 
   displayTime(hours, minutes);
   strip.show();
 
   // Reloading all ten seconds
-  delay(1000);
+  //    delay(1500);
+
 }
 
 
 // WARM UP LED
 void warmUp(int temps, int color[3]) {
 
-  for (int i = 0; i < PIXEL_COUNT; i++) {
+  for (int i = PIXEL_COUNT; i > 0; i--) {
     strip.setPixelColor(i, color[0], color[1], color[2]);
     delay(temps);
     strip.show();
@@ -177,15 +184,16 @@ void displayTime(int hours, int minutes) {
     strip.setPixelColor(i, 0, 0, 0);
   }
 
-  if (hours != 12) {
+  if (hours != 12 && hours != 0 ) {
     int plural = false;
-    paintWord(arrIlEst, MAINCOLOR, IL_EST_COUNT);
+
     if (hours > 1) {
       plural = true;
     }
     paintHourText(plural);
   }
 
+  paintWord(arrIlEst, MAINCOLOR, IL_EST_COUNT);
   paintHours(hours);
   paintMinutes(minutes);
   paintTinyMinutes(minutes);
@@ -231,6 +239,7 @@ void paintHourText(bool plural) {
 }
 
 void paintHours(int hours) {
+
   switch (hours) {
     case (0):
       paintWord(arrMinuit, MAINCOLOR, MINUIT_COUNT);
@@ -319,6 +328,8 @@ void paintMinutes(int minutes) {
   if (minutes >= 45 && minutes < 50) {
     paintWord(arrMoins, MAINCOLOR, MOINS_COUNT);
     paintWord(arrQuart, MAINCOLOR, QUART_COUNT);
+    paintWord(arrLe, MAINCOLOR, LE_COUNT);
+
   }
   if (minutes >= 50 && minutes < 55) {
     paintWord(arrMoins, MAINCOLOR, MOINS_COUNT);
@@ -350,7 +361,7 @@ void paintTinyMinutes(int minutes) {
     paintWord(arrTroisMintute, MAINCOLOR, TROIS_MINUTE_COUNT);
     paintWord(arrQuatreMintute, MAINCOLOR, QUATRE_MINUTE_COUNT);
   }
-  
+
   if (minutes == 6 || minutes == 16 || minutes == 26 || minutes == 36 || minutes == 46 || minutes == 56) {
     paintWord(arrUneMintute, MAINCOLOR, UNE_MINUTE_COUNT);
   }
