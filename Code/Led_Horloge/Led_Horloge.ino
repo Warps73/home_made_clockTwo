@@ -96,10 +96,7 @@ int TROIS_MINUTE_COUNT = 1;
 int arrQuatreMintute[] = {0};
 int QUATRE_MINUTE_COUNT = 1;
 
-int currentHour;
-int currentMinute;
-int oldHour;
-int oldMinute;
+bool heureHiver = false;
 
 
 void setup() {
@@ -136,6 +133,9 @@ void loop() {
   //  Serial.print(now.hour(), DEC);
   //  Serial.print(now.minute(), DEC);
 
+  if(!heureHiver){
+    hours++;
+  }
 
   // IF Midnight SET hours to 24
   // to not get negative hours
