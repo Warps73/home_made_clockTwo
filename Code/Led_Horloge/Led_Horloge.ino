@@ -121,8 +121,9 @@ void setup() {
     // for example to set January 27 2017 at 12:56 you would call:
     rtc.adjust(DateTime(2020, 16, 02, 17, 27, 20));
   }
-  //    rtc.adjust(DateTime(2019, 22, 12, 12, 12, 15));
-  //rtc.adjust(DateTime(2020, 16, 02, 17, 30, 35));
+  //  rtc.adjust(DateTime(2019, 22, 12, 12, 12, 15));
+  // Use this line to set the current date time
+  //    rtc.adjust(DateTime(2020, 31, 05, 10,01, 50));
 }
 
 void loop() {
@@ -133,7 +134,7 @@ void loop() {
   //  Serial.print(now.hour(), DEC);
   //  Serial.print(now.minute(), DEC);
 
-  if(!heureHiver){
+  if (!heureHiver) {
     hours++;
   }
 
@@ -141,10 +142,10 @@ void loop() {
   // to not get negative hours
   if (hours > 20 || hours < 7 ) {
     strip.setBrightness(100);
-  }else{
+  } else {
     strip.setBrightness(255);
   }
-   Serial.print(strip.getBrightness());
+  Serial.print(strip.getBrightness());
 
   // Set hours if more than half an hour
   // ex :"Trois heures moins cinq"
@@ -152,10 +153,16 @@ void loop() {
     hours++;
   }
 
+  // if midnight set hours to 0
+  if (hours == 24) {
+    hours = 0;
+  }
+
   // SET hours to 0-12
   if (hours > 12) {
     hours = hours - 12;
   }
+
 
 
   displayTime(hours, minutes);
